@@ -213,7 +213,7 @@ REST_AUTH = {
     "JWT_AUTH_REFRESH_COOKIE": "my-refresh-token",
     "JWT_AUTH_HTTPONLY": False,
     "REGISTER_SERIALIZER": "users.serializers.NameRegistrationSerializer",
-    "PASSWORD_RESET_SERIALIZER": "dj_rest_auth.serializers.PasswordResetSerializer",
+    "PASSWORD_RESET_SERIALIZER": "users.serializers.CustomPasswordResetSerializer",
     "PASSWORD_RESET_CONFIRM_SERIALIZER": "dj_rest_auth.serializers.PasswordResetConfirmSerializer",
 }
 
@@ -234,6 +234,8 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_USERNAME_REQUIRED = False
 LOGOUT_ON_PASSWORD_CHANGE = False
 PASSWORD_RESET_TIMEOUT = 1800   # 30 minutes.
+# TODO: Need to figure out how this will be decided.
+PASSWORD_RESET_DOMAIN = "planscape.org" # Password reset domain
 
 
 # PostGIS constants. All raster data should be ingested with a common
