@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.models import User
 from django.http import (HttpRequest, HttpResponse, HttpResponseBadRequest,
                          JsonResponse)
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, CustomPasswordResetConfirmSerializer
 
 def get_user(request: HttpRequest) -> User:
     user = None
@@ -41,3 +41,10 @@ def delete_user(request: HttpRequest) -> HttpResponse:
         return JsonResponse({"deleted": True})
     except Exception as e:
         return HttpResponseBadRequest("Ill-formed request: " + str(e))
+
+def validate_token(request: HttpRequest) -> HttpResponse:
+    if CustomPasswordResetConfirmSerializer().validate(data=request.data):
+      return JsonResponse({"validated": True})
+    else:
+      return JsonResponse({"validated": False})
+

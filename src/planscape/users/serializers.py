@@ -1,5 +1,5 @@
 from dj_rest_auth.registration.serializers import RegisterSerializer
-from dj_rest_auth.serializers import PasswordResetSerializer
+from dj_rest_auth.serializers import PasswordResetSerializer, PasswordResetConfirmSerializer
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from users.forms import CustomAllAuthPasswordResetForm
@@ -19,6 +19,22 @@ class CustomPasswordResetSerializer(PasswordResetSerializer):
   @property
   def password_reset_form_class(self):
     return CustomAllAuthPasswordResetForm
+
+class CustomPasswordResetConfirmSerializer(PasswordResetConfirmSerializer):
+    """
+    Serializer for validating an account reset request and save the new password.
+    """
+    def validate(self, attrs):
+      try:
+        return super.validate(attrs)
+      except serializers.ValidationError as exception:
+        if "token" in exception.detail:
+          # token is invalid, fail the validation
+          return None
+    
+    def save(self):
+      # todo: might want to check account history before saving the password
+      return super.save()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
